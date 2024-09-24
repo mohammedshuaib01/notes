@@ -1,0 +1,171 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'CSS/style.css' %}">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="{% static 'css/font/fonts.css' %}">
+    <title>Notes</title>
+    <style>
+        /* Style for the form container class */
+        .input-form-container {
+            display: flex;
+            flex-direction: column;
+            width: 90%;
+            position: absolute;
+            left: 1.8rem;
+            right: 1.8rem;
+            bottom: 1.8rem;
+            padding: 0;
+            margin: 0;
+        }
+
+        
+        .form-input-field {
+            width: 100%;
+            padding: 1.2rem;
+            border-radius: 0.7rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            margin-bottom: 1rem;
+        }
+
+        /* Button Styling */
+        .form-submit-button {
+            width: 100%;
+            background-color: var(--black);
+            color: #fff;
+            border: none;
+            padding: 1rem;
+            border-radius: 0.7rem;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-submit-button:hover {
+            background-color: #333;
+        }
+
+        /* Search Box Styling */
+        .search-box {
+            display: flex;
+            align-items: center;
+            margin: 20px 0 ;
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+            margin-bottom: 10px;
+        }
+
+        .search-box input[type="search"] {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input[type="search"]::placeholder {
+            color: #999;
+            font-size: 14px;
+        }
+
+        .search-box button.search-button {
+            background-color: var(--black);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            margin-left: 10px;
+            border-radius: 0.7rem;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .search-box button.search-button:hover {
+            background-color: #333 ;
+        }
+
+        .search-box .delete {
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box .delete a {
+            text-decoration: none;
+            color: #dc3545;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box .delete a .material-symbols-outlined {
+            font-size: 20px;
+        }
+
+        .search-form {
+            display: flex;
+            width: 75%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="poppins-bold">NOTES</h1>
+
+        <div class="search-box">
+            <form method="GET" action="{% url 'notes-list' %}" class="search-form">
+                <input type="search" id="search-input" name="q" placeholder="Enter your search item..."
+                    value="{{ query|default:'' }}">
+                <button type="submit" class="search-button">Search</button>
+
+            </form>
+
+            <span class="delete"></span>
+                Clear All
+                <a class="delete" href="{% url 'notes-all-delete' %}">
+                    <span class="material-symbols-outlined" style="color: #3a3939;">delete</span>
+                </a>
+            </span>
+
+        </div>
+
+        <div></div>
+
+        <div class="list-container" id="list-container">
+            {% for i in data %}
+            <div class="list-item">
+                <p>{{ i.title }}</p>
+                <a class="delete" href="{% url 'notes-delete' i.id %}">
+                    <span class="material-symbols-outlined" style="color: #3a3939;">delete</span>
+                </a>
+            </div>
+            {% empty %}
+            <p>No notes found.</p>
+            {% endfor %}
+        </div>
+
+        <div class="input-form-container">
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="text" class="form-input-field" name="title" placeholder="Enter your note...">
+                <button type="submit" class="form-submit-button">Add</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- <script src="./script.js"></script> -->
+</body>
+
+</html>
